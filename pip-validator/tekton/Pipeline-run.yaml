@@ -1,0 +1,27 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: pval-py-pipeline-run
+spec:
+  serviceAccountName: build-bot
+  pipelineRef:
+    name: pumba-generic-pipeline
+  params:
+    - name: pumba-object
+      value: PKGValidator/py
+  resources:
+  - name: image
+    resourceRef:
+      name: pval-pyval-image
+  - name: source
+    resourceRef:
+      name: pval-pyval-git-branch
+  workspaces:
+  - name: pipeline-ws
+    volumeClaimTemplate:
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
